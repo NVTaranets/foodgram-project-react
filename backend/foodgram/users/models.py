@@ -25,7 +25,7 @@ class MyUser(AbstractUser):
         max_length=150,
         blank=True,
         verbose_name='Фамилия'
-         )
+    )
     email = models.EmailField(
         max_length=254,
         unique=True,
@@ -35,7 +35,7 @@ class MyUser(AbstractUser):
         max_length=150,
         blank=True,
         verbose_name='Имя'
-         )
+    )
 
     class Meta:
         verbose_name = 'Пользователь'
