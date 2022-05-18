@@ -17,7 +17,7 @@ class MyUserAdmin(UserAdmin):
         'is_active',
         'is_superuser'
     )
-    list_display_links = ('id', 'email',)
+    list_display_links = ('id', 'email', )
     list_filter = ('email', 'username', )
     fieldsets = (
         (None, {'fields': (
