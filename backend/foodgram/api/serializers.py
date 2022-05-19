@@ -4,7 +4,7 @@ from djoser.serializers import UserCreateSerializer
 from drf_extra_fields.fields import Base64ImageField
 from rest_framework import serializers
 
-from recipes.models import (CartShopping, Favorite, Ingredients, Recipes,
+from recipes.models import (Ingredients, Recipes,
                             RecipesIngredients, Tags)
 
 User = get_user_model()
@@ -59,7 +59,7 @@ class SubscriptionsSerializer(RecipesUser):
     is_subscribed = serializers.SerializerMethodField()
     recipes = serializers.SerializerMethodField()
     recipes_count = serializers.IntegerField(
-        source='author.recipes.count', 
+        source='author.recipes.count',
         read_only=True
     )
 

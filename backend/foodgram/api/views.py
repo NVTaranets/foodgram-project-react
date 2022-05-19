@@ -2,13 +2,12 @@ from django.contrib.auth import get_user_model
 from django.db.models import Sum
 from django.shortcuts import get_object_or_404
 from djoser.views import UserViewSet
+from recipes.models import (CartShopping, Favorite, Ingredients, Recipes,
+                            RecipesIngredients, Subscribe, Tags)
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-
-from recipes.models import (CartShopping, Favorite, Ingredients, Recipes,
-                            RecipesIngredients, Subscribe, Tags)
 
 from .filters import IngredientFilter, UserRecipeFilter
 from .pagination import PageNumberPagination

@@ -1,6 +1,5 @@
 from django.contrib import admin
 from django_filters.rest_framework import FilterSet, filters
-
 from recipes.models import Ingredients, Recipes, Tags
 
 

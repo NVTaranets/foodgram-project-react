@@ -26,7 +26,7 @@ class MyUserAdmin(UserAdmin):
             'first_name',
             'last_name',
             'password'
-             )}),
+        )}),
         ('Permissions', {'fields': ('is_staff', 'is_active')}),
     )
     add_fieldsets = (

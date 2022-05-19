@@ -1,5 +1,4 @@
 from django.contrib import admin
-from django.utils.safestring import mark_safe
 
 from .models import (CartShopping, Favorite, Ingredients, Recipes, Subscribe,
                      Tags)
@@ -106,6 +105,7 @@ class FavoriteAdmin(admin.ModelAdmin):
         'user',
         'recipes',
     )
+
 
 @admin.register(CartShopping)
 class CartShoppingAdmin(admin.ModelAdmin):
