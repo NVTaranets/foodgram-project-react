@@ -19,6 +19,10 @@ from django.core.management.utils import get_random_secret_key
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+CSRF_TRUSTED_ORIGINS = [
+    'http://foodgram-nvt.tk'
+]
+
 STATIC_URL = '/static/'
 
 # STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static/'),)
@@ -95,8 +99,12 @@ WSGI_APPLICATION = 'foodgram.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': os.getenv('DB_ENGINE', default='django.db.backends.postgresql'),
+        'NAME': os.getenv('POSTGRES_DB', default='postgres'),
+        'USER': os.getenv('POSTGRES_USER', default='postgres'),
+        'PASSWORD': os.getenv('POSTGRES_PASSWORD', default='1234qwerty'),
+        'HOST': os.getenv('POSTGRES_HOST', default='db'),
+        'PORT': os.getenv('POSTGRES_PORT', default='5432'),
     }
 }
 
@@ -157,3 +165,17 @@ REST_FRAMEWORK = {
 }
 
 AUTH_USER_MODEL = 'users.MyUser'
+
+DJOSER = {
+    "LOGIN_FIELD": "email",
+    "HIDE_USERS": False,
+    "PERMISSIONS": {
+        "user": ("rest_framework.permissions.IsAuthenticated",),
+        "user_list": ("rest_framework.permissions.AllowAny",)
+    },
+    "SERIALIZERS": {
+        'user_create': 'api.serializers.UserSerializer',
+        'user': 'api.serializers.CustomUserSerializer',
+        'current_user': 'api.serializers.CustomUserSerializer',
+    }
+}
