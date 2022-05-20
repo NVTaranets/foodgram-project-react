@@ -68,10 +68,10 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           passphrase: ${{ secrets.PASSPHRASE }}
           script: |
+            cd foodgram
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_BACK_NAME }}:latest
             sudo docker-compose stop
             sudo docker-compose rm -f backend
-            cd foodrgam
             touch .env
             echo DEBUG=${{ secrets.DEBUG }} > .env
             echo SECRET_KEY_PROJECT=${{ secrets.PROJECT_SECRET_KEY }} > .env

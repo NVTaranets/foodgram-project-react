@@ -8,7 +8,7 @@ from foodgram.settings import BASE_DIR
 
 
 class Command(BaseCommand):
-    help = 'Import initial data from file ../../data/*.csv args sequensial'
+    help = 'Import initial data from file data/*.csv args sequensial'
 
     def add_arguments(self, parser):
         parser.add_argument('files', nargs='+', type=str)
@@ -20,13 +20,11 @@ class Command(BaseCommand):
         name_fields = {
             'ingredients.csv': ('name', 'measurement_unit')
         }
-        dir_data = os.path.join(BASE_DIR, "../../data")
-        print(dir_data)
         for file_csv in options['files']:
             if file_csv not in obj.keys():
                 raise CommandError('Unknown file to import "%s"' % file_csv)
             try:
-                full_fn = os.path.join(dir_data, file_csv)
+                full_fn = os.path.join(BASE_DIR, file_csv)
                 with open(full_fn, 'r', newline='', encoding='utf-8') as csvf:
                     reader = csv.reader(csvf)
                     list_obj = list()
