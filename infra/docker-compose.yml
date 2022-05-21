@@ -1,8 +1,24 @@
 version: '3.3'
 services:
+
+  portainer:
+    image: portainer/portainer-ce:2.11.0
+    container_name: portainer
+    restart: always
+    command: -H unix:///var/run/docker.sock
+    environment:
+      - VIRTUAL_HOST=broker
+    ports:
+      - "8000:8000"
+      - "9000:9000"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./data/portainer:/data
+    depends_on:
+      - nginx
+
   db:
     image: postgres:14.0-alpine
-    restart: always
     volumes:
       - /var/lib/postgresql/data/
     env_file:
@@ -26,6 +42,7 @@ services:
   
   nginx:
     image: nginx:1.19.3
+    restart: always
     ports:
       - "80:80"
     volumes:
@@ -36,22 +53,6 @@ services:
       - media_value:/var/html/media/
     depends_on:
       - backend
-
-  portainer:
-    image: portainer/portainer-ce:2.0.1
-    container_name: portainer
-    restart: always
-    command: -H unix:///var/run/docker.sock
-    environment:
-      - VIRTUAL_HOST=broker
-    ports:
-      - "8000:8000"
-      - "9000:9000"
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - ./data/portainer:/data
-    depends_on:
-      - nginx
 
 volumes:
   static_value:

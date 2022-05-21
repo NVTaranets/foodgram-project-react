@@ -67,7 +67,7 @@ class MyUserViewSet(UserViewSet):
             User,
             id=user.id
         )
-        queryset = [i.author for i in user.subscribe.all()]
+        queryset = user.subscribe.all()
         page = self.paginate_queryset(queryset)
         if page is not None:
             serializer = SubscriptionsSerializer(
