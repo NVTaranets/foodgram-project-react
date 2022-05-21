@@ -2,12 +2,14 @@ version: '3.3'
 services:
   db:
     image: postgres:14.0-alpine
+    restart: always
     volumes:
       - /var/lib/postgresql/data/
     env_file:
       - ./.env
 
   frontend:
+    restart: always
     image: dnvth/foodgram-frontend:latest
     volumes:
       - ./frontend/:/app/result_build/
