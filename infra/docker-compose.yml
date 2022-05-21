@@ -9,7 +9,6 @@ services:
       - ./.env
 
   frontend:
-    restart: always
     image: dnvth/foodgram-frontend:latest
     volumes:
       - ./frontend/:/app/result_build/
@@ -35,17 +34,19 @@ services:
       - ./docs/:/usr/share/nginx/html/api/docs/
       - static_value:/var/html/static/
       - media_value:/var/html/media/
+    depends_on:
+      - backend
 
   portainer:
-    image: portainer/portainer:latest
+    image: portainer/portainer-ce:2.0.1
     container_name: portainer
     restart: always
     command: -H unix:///var/run/docker.sock
     environment:
       - VIRTUAL_HOST=broker
     ports:
-      - 127.0.0.1:8000:8000
-      - 127.0.0.1:9000:9000
+      - "8000:8000"
+      - "9000:9000"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./data/portainer:/data
