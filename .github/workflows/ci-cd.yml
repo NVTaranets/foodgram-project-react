@@ -70,7 +70,7 @@ jobs:
           script: |
             cd foodgram
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_BACK_NAME }}:latest
-            sudo docker-compose stop
+            sudo docker-compose stop backend
             sudo docker-compose rm -f backend
             touch .env
             echo DEBUG=${{ secrets.DEBUG }} > .env
