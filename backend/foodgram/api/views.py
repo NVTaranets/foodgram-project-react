@@ -14,7 +14,8 @@ from .pagination import PageNumberPagination
 from .permissions import IsAdminOrReadOnly, IsAuthorOrReadOnly
 from .serializers import (CustomUserSerializer, IngredientSerializer,
                           RecipesSerializer, RecipesSerializerGet,
-                          SubscriptionsSerializer, TagSerializer)
+                          SubscriptionsSerializer, TagSerializer,
+                          CustomUserSerializer)
 from .utilites import add_or_delete, download_page
 
 User = get_user_model()
@@ -60,6 +61,7 @@ class MyUserViewSet(UserViewSet):
         detail=False,
         url_path='subscriptions',
         permission_classes=(IsAuthenticated,),
+        serializer_class=CustomUserSerializer,
     )
     def subscriptions(self, request):
         user = request.user
@@ -67,8 +69,7 @@ class MyUserViewSet(UserViewSet):
             User,
             id=user.id
         )
-        queryset = user.subscribe.all()
-        print(queryset.values())
+        queryset = [i.author for i in user.subscribe.all()]
         page = self.paginate_queryset(queryset)
         if page is not None:
             serializer = SubscriptionsSerializer(

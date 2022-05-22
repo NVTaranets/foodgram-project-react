@@ -14,14 +14,10 @@ import os
 from pathlib import Path
 
 from django.core.management.utils import get_random_secret_key
-# from dotenv import load_dotenv
+from dotenv import load_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
-CSRF_TRUSTED_ORIGINS = [
-    'http://foodgram-nvt.tk'
-]
 
 STATIC_URL = '/static/'
 
@@ -32,7 +28,6 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 FONT_ROOT = os.path.join(BASE_DIR, 'fonts')
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
@@ -101,12 +96,8 @@ WSGI_APPLICATION = 'foodgram.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': os.getenv('DB_ENGINE', default='django.db.backends.postgresql'),
-        'NAME': os.getenv('POSTGRES_DB', default='postgres'),
-        'USER': os.getenv('POSTGRES_USER', default='postgres'),
-        'PASSWORD': os.getenv('POSTGRES_PASSWORD', default='1234qwerty'),
-        'HOST': os.getenv('POSTGRES_HOST', default='db'),
-        'PORT': os.getenv('POSTGRES_PORT', default='5432'),
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
 
@@ -167,17 +158,3 @@ REST_FRAMEWORK = {
 }
 
 AUTH_USER_MODEL = 'users.MyUser'
-
-DJOSER = {
-    "LOGIN_FIELD": "email",
-    "HIDE_USERS": False,
-    "PERMISSIONS": {
-        "user": ("rest_framework.permissions.IsAuthenticated",),
-        "user_list": ("rest_framework.permissions.AllowAny",)
-    },
-    "SERIALIZERS": {
-        'user_create': 'api.serializers.UserSerializer',
-        'user': 'api.serializers.CustomUserSerializer',
-        'current_user': 'api.serializers.CustomUserSerializer',
-    }
-}
