@@ -52,6 +52,19 @@ services:
       - static_value:/var/html/static/
       - media_value:/var/html/media/
     depends_on:
+      - certbot
+
+  certbot:
+    image: certbot/certbot
+    container_name: certbot
+    restart: unless-stopped
+    volumes:
+      - ./conf/certbot:/etc/letsencrypt
+      - ./conf/nginx/www:/var/www/certbot
+    networks:
+      - backend
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; chmod 644 /etc/letsencrypt/archive/foodgram-nvt.tk/*.pem; sleep 12h & wait $${!}; done;'"
+    depends_on:
       - backend
 
 volumes:
