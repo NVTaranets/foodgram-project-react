@@ -77,8 +77,8 @@ class SubscriptionsSerializer(RecipesUser):
         )
 
     def get_recipes(self, obj):
-        queryset = obj.recipes.all()
-        return RecipesSerializer(
+        queryset = Recipes.objects.filter(author=obj)
+        return RecipesUser(
             queryset,
             many=True
         ).data

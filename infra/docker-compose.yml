@@ -19,10 +19,26 @@ services:
 
   db:
     image: postgres:14.0-alpine
+    environment:
+      PGDATA: "/var/lib/postgresql/data/pgdata"
     volumes:
       - /var/lib/postgresql/data/
     env_file:
       - ./.env
+    restart: unless-stopped
+
+  pgadmin:
+    container_name: pgadmin_container
+    image: dpage/pgadmin4:5.7
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "habrpguser@habr.com"
+      PGADMIN_DEFAULT_PASSWORD: "pgadminpwd4habr"
+      PGADMIN_CONFIG_SERVER_MODE: "False"
+    volumes:
+      - ./pgadmin:/var/lib/pgadmin
+    ports:
+      - "5050:80"
+    restart: unless-stopped
 
   frontend:
     image: dnvth/foodgram-frontend:latest
@@ -51,19 +67,6 @@ services:
       - ./docs/:/usr/share/nginx/html/api/docs/
       - static_value:/var/html/static/
       - media_value:/var/html/media/
-    depends_on:
-      - certbot
-
-  certbot:
-    image: certbot/certbot
-    container_name: certbot
-    restart: unless-stopped
-    volumes:
-      - ./conf/certbot:/etc/letsencrypt
-      - ./conf/nginx/www:/var/www/certbot
-    networks:
-      - backend
-    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; chmod 644 /etc/letsencrypt/archive/foodgram-nvt.tk/*.pem; sleep 12h & wait $${!}; done;'"
     depends_on:
       - backend
 

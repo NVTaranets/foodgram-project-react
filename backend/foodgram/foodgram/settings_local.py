@@ -36,10 +36,11 @@ FONT_ROOT = os.path.join(BASE_DIR, 'fonts')
 SECRET_KEY = os.getenv('SECRET_KEY', default=get_random_secret_key())
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv('DEBUG', default='false').lower() in ('true', '1', 't', 'y', 'yes', 'yeah', 'yup', 'certainly', 'uh-huh')
+DEBUG = os.getenv('DEBUG', default='true').lower() in ('true', '1', 't', 'y', 'yes', 'yeah', 'yup', 'certainly', 'uh-huh')
 
 ALLOWED_HOSTS = ['*']
 
+AUTH_USER_MODEL = 'users.MyUser'
 
 # Application definition
 
@@ -157,4 +158,16 @@ REST_FRAMEWORK = {
     ],
 }
 
-AUTH_USER_MODEL = 'users.MyUser'
+DJOSER = {
+    "LOGIN_FIELD": "email",
+    "HIDE_USERS": False,
+    "PERMISSIONS": {
+        "user": ("rest_framework.permissions.IsAuthenticated",),
+        "user_list": ("rest_framework.permissions.AllowAny",)
+    },
+    "SERIALIZERS": {
+        'user_create': 'api.serializers.UserSerializer',
+        'user': 'api.serializers.CustomUserSerializer',
+        'current_user': 'api.serializers.CustomUserSerializer',
+    }
+}

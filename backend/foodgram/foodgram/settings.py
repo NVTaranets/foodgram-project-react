@@ -45,6 +45,7 @@ DEBUG = os.getenv('DEBUG', default='false').lower() in ('true', '1', 't', 'y', '
 
 ALLOWED_HOSTS = ['*']
 
+AUTH_USER_MODEL = 'users.MyUser'
 
 # Application definition
 
@@ -165,8 +166,6 @@ REST_FRAMEWORK = {
         'django_filters.rest_framework.DjangoFilterBackend',
     ],
 }
-
-AUTH_USER_MODEL = 'users.MyUser'
 
 DJOSER = {
     "LOGIN_FIELD": "email",
