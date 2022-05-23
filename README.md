@@ -52,76 +52,81 @@ password: asdfQWER12#$
 ### Структура проекта:
 
 ```cmd
-|   .env
 |   .gitignore
 |   README.md
-|   
-+---backend  <--
-|   |   Dockerfile
-|   |   manage.py
-|   |   requirements.txt
-|   |   
-|   +---api
-|   |   |   apps.py
-|   |   |   filters.py
-|   |   |   pagination.py
-|   |   |   permissions.py
-|   |   |   urls.py
-|   |   |   utils.py
-|   |   |   views.py
-|   |   |   __init__.py
-|   |   |   
-|   |   \---__pycache__
-|   |           
-|   +---backend
-|   |   |   asgi.py
-|   |   |   settings.py
-|   |   |   urls.py
-|   |   |   wsgi.py
-|   |   |   __init__.py
-|   |   |   
-|   |   \---__pycache__
-|   |           
-|   +---data  <-- Данные для наполнения БД "Ингредиенты"
-|   |       ingredients.csv
-|   |       ingredients.json
-|   |       
-|   +---recipes
-|   |   |   admin.py
-|   |   |   apps.py
-|   |   |   models.py
-|   |   |   serializers.py
-|   |   |   views.py
-|   |   |   __init__.py
-|   |   |           
-|   |   \---__pycache__
-|   |           
-|   +---scripts  <-- Скрипт для заполнения БД "Ингредиенты"
-|   |   |   load_ing_data.py
-|   |   |   __init__.py
-|   |   |   
-|   |   \---__pycache__
-|   |           
-|   \---users
-|       |   admin.py
-|       |   apps.py
-|       |   models.py
-|       |   serializers.py
-|       |   views.py
-|       |   __init__.py
-|       |   
-|       \---__pycache__
-|               
+|   setup.cfg
+|
++---.github  <-- Action для CI/CD проекта
+|   \---workflows
+|           ci-cd.yml
+|
++---backend
+|   \---foodgram  <-- Бекенд проекта "Продуктовый помошник"
+|       |   db.sqlite3
+|       |   Dockerfile
+|       |   manage.py
+|       |   requirements.txt
+|       |
+|       +---api
+|       |       apps.py
+|       |       filters.py
+|       |       pagination.py
+|       |       permissions.py
+|       |       serializers.py
+|       |       urls.py
+|       |       utilites.py
+|       |       views.py
+|       |       __init__.py
+|       |
+|       +---fonts
+|       |       times.ttf
+|       |
+|       +---foodgram
+|       |       asgi.py
+|       |       settings.py
+|       |       urls.py
+|       |       wsgi.py
+|       |       __init__.py
+|       |
+|       +---media
+|       |   \---recipes
+|       |
+|       +---recipes
+|       |   |   admin.py
+|       |   |   apps.py
+|       |   |   models.py
+|       |   |   __init__.py
+|       |   |
+|       |   +---management
+|       |       |   __init__.py
+|       |       |
+|       |       +---commands  <-- Менеджмент команда для заполнения Модели "Ингредиенты"
+|       |               import_csv_data.py
+|       |
+|       +---static
+|       |
+|       \---users
+|           |   admin.py
+|           |   apps.py
+|           |   forms.py
+|           |   managers.py
+|           |   models.py
+|           |   validators.py
+|           |   __init__.py
+|           |
+|           +---migrations
+|
++---data  <-- Данные для наполнения БД "Ингредиенты"
+|       fixtures.json.gz
+|       ingredients.csv
+|       media_recipes.tar
+|
 +---docs  <-- Документация по API
 |       openapi-schema.yml
 |       redoc.html
-|       
+|
 +---frontend  <-- Фронтенд для сборки файлов
 |   |   Dockerfile
-|   |   package-lock.json
-|   |   package.json
-|   |   yarn.lock
-|   |   
 |   ...
 |         
 +---infra  <-- Сборка контейнеров, настройка сервера
@@ -129,6 +134,7 @@ password: asdfQWER12#$
 |       nginx.conf
 |       
 \---venv
+|   ...
 ```
 
 - Склонируйте репозиторий на свой компьютер:
@@ -145,13 +151,21 @@ docker-compose up -d
 
 - В контейнере **backend**:
     - выполните миграции;
+    - соберите статику проекта  
     - установите **superuser**;
     - заполните БД исходными данными:
 
 ```py
-docker-compose exec backend python manage.py migrate
-docker-compose exec backend python manage.py createsuperuser
-docker-compose exec backend python manage.py runscript load_ing_data
+docker-compose exec backend python manage.py migrate users
+docker-compose exec backend python manage.py migrate --fake-initial --run-syncdb
+docker-compose exec backend python manage.py collectstatic --no-input
+docker-compose exec backend bash
+python manage.py createsuperuser
+.
+.
+.
+exit
+docker-compose exec backend python manage.py imort_csv_data ingredients.csv
 ```
 
 [⬆️Оглавление](#оглавление)
