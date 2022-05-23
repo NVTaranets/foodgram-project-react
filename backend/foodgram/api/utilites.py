@@ -152,7 +152,8 @@ def download_page(input_dict):
     stor.append(Paragraph('', body))
     stor.append(
         Paragraph(
-            f'Спасибо за использование сервиса  {CSRF_TRUSTED_ORIGINS[0]}   :)!!!',
+            'Спасибо за использование сервиса'
+            f'  {CSRF_TRUSTED_ORIGINS[0]}   :)!!!',
             body
         )
     )
