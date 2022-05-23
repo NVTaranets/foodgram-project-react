@@ -20,7 +20,7 @@ from django.core.management.utils import get_random_secret_key
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 CSRF_TRUSTED_ORIGINS = [
-    'http://foodgram-nvt.tk'
+    'http://foodgram-nvt.tk',
 ]
 
 STATIC_URL = '/static/'

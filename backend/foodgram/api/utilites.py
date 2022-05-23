@@ -11,7 +11,7 @@ from rest_framework.response import Response
 from wsgiref.util import FileWrapper
 
 from .serializers import RecipesUser
-from foodgram.settings import FONT_ROOT
+from foodgram.settings import CSRF_TRUSTED_ORIGINS, FONT_ROOT
 
 # Импортируем библиотеки для формирования отчета в формате PDF
 from reportlab.lib import colors
@@ -71,7 +71,10 @@ def add_or_delete(request, model, obj_id):
     )
 
 
-def download_page(cart_list):
+def download_page(input_dict):
+    user = input_dict['user']
+    recipes_list = input_dict['recipes_list']
+    cart_list = input_dict['cart_list']
     pdfmetrics.registerFont(
         TTFont(
             'Times',
@@ -87,7 +90,13 @@ def download_page(cart_list):
         fontName='Times',
         fontSize=24,
         leading=34,
+    )
 
+    h2 = PS(
+        name='Heading2',
+        fontName='Times',
+        fontSize=12,
+        leading=16,
     )
 
     body = PS('body')
@@ -99,13 +108,17 @@ def download_page(cart_list):
     doc = MyDocTemplate(
         newfile.name,
         pagesize=A4,
-        title="Корзина продуктов",
-        autor="",
+        title=f'Корзина продуктов для {user}',
+        autor=f'{CSRF_TRUSTED_ORIGINS[0]}',
         subject=""
     )
 
     stor = []
-    stor.append(Paragraph('Список покупок', h1))
+    stor.append(Paragraph('Список продуктов', h1))
+    stor.append(Paragraph('для приготовления рецептов:', h1))
+    for i, recipes in enumerate(recipes_list, 1):
+        stor.append(Paragraph(f"{i}. {recipes['recipes__name']}", h2))
+    stor.append(Paragraph(f'подготовлен для {user}', h1))
     t_data = [
         [f'{i}',
          ingredient['ingredients__name'],
@@ -124,7 +137,7 @@ def download_page(cart_list):
     tabl.setStyle(
         TableStyle(
             [('FONTNAME', (0, 0), (-1, -1), 'Times'),
-             ('ALIGN', (0, 0), (0, -1), 'RIGHT'),
+             ('ALIGN', (0, 0), (0, -1), 'CENTER'),
              ('INNERGRID', (0, 0), (-1, -1), 0.25, colors.black),
              ('BOX', (0, 0), (-1, -1), 0.8, colors.black),
              ('BOX', (0, 0), (-1, 0), 0.8, colors.black),
@@ -137,7 +150,12 @@ def download_page(cart_list):
     tabl._argW[3] = 3 * cm
     stor.append(tabl)
     stor.append(Paragraph('', body))
-    stor.append(Paragraph('Спасибо за использование сервиса :)!!!', body))
+    stor.append(
+        Paragraph(
+            f'Спасибо за использование сервиса  {CSRF_TRUSTED_ORIGINS[0]}   :)!!!',
+            body
+        )
+    )
     doc.multiBuild(stor)
 
     response = HttpResponse(

@@ -145,7 +145,15 @@ class RecipesViewSet(viewsets.ModelViewSet):
             'ingredients__name',
             'ingredients__measurement_unit'
         ).annotate(amount=Sum('amount'))
-        return download_page(cart_list)
+        recipes_list = user.cart_shoppings.values('recipes__name').all()
+
+        return download_page(
+            {
+                'user': user,
+                'recipes_list': recipes_list,
+                'cart_list': cart_list,
+            }
+        )
 
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
