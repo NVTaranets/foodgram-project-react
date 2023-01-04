@@ -1,6 +1,6 @@
 # Продуктовый помощник
 
-Досупен по [ссылке](http://foodgram-nvt.tk)
+Досупен по [ссылке](http://nvtaranets.ru)
 
 <details>
   <summary> Админка </summary>
@@ -29,7 +29,6 @@ password: asdfQWER12#$
 - PostgreSQL;
 - pgAdmin
 - Portainer
-- Yandex.Cloud.
 
 [⬆️Оглавление](#оглавление)
 
