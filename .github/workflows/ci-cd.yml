@@ -69,7 +69,7 @@ jobs:
           port: ${{ secrets.SSH_PORT }}
           # passphrase: ${{ secrets.PASSPHRASE }}
           script: |
-            cd foodgram
+            cd ${{ secrets.PROJECT_HOME_DIR }}
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_BACK_NAME }}:latest
             sudo docker-compose stop backend
             sudo docker-compose rm -f backend
