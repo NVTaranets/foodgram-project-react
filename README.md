@@ -158,7 +158,7 @@ python manage.py createsuperuser
 .
 .
 exit
-docker-compose exec backend python manage.py imort_csv_data ingredients.csv
+docker-compose exec backend python manage.py import_csv_data ingredients.csv
 ```
 
 [⬆️Оглавление](#оглавление)
