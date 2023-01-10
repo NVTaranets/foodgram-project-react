@@ -86,6 +86,7 @@ jobs:
             echo DB_ADMIN=${{ secrets.PGADMIN_DEFAULT_EMAIL }} >> .env
             echo PGADMIN_DEFAULT_PASSWORD=${{ secrets.PGADMIN_DEFAULT_PASSWORD }} >> .env
             echo PGADMIN_DEFAULT_EMAIL=${{ secrets.PGADMIN_DEFAULT_EMAIL }} >> .env
+            echo PGADMIN_LISTEN_PORT=5050 >> .env
             sudo docker-compose up -d
 
   send_message:
